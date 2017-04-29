@@ -98,6 +98,12 @@ if [ ! -z $VOLUME ] &&  [ ! -z $SELECTION ]; then
         echo "ERROR: No 'selection' file"
         exit
     fi
+    
+    data_type=$(fslinfo $SELECTION |awk '/data_type/{print $2}')
+    if [ $data_type != "INT16" ]; then
+        fslmaths $SELECTION $SELECTION.tmp -odt short
+        SELECTION=$SELECTION.tmp
+    fi
 
     name=${OUTPUT%.vramonz}
     name=$(basename $name)
