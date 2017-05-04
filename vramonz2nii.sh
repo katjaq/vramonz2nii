@@ -107,8 +107,9 @@ if [ ! -z $VOLUME ] &&  [ ! -z $SELECTION ]; then
     
     data_type=$(fslinfo $SELECTION |awk '/data_type/{print $2}')
     if [ $data_type != "INT16" ]; then
-        fslmaths $SELECTION $SELECTION.tmp -odt short
-        SELECTION=$SELECTION.tmp
+        echo "Conforming the mask to int16"
+        fslmaths -dt float $SELECTION -bin ${SELECTION%.nii.gz}.tmp -odt short
+        SELECTION=${SELECTION%.nii.gz}.tmp
     fi
 
     name=${OUTPUT%.vramonz}
