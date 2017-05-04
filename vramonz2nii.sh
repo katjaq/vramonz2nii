@@ -104,6 +104,12 @@ if [ ! -z $VOLUME ] &&  [ ! -z $SELECTION ]; then
         echo "ERROR: No 'selection' file"
         exit
     fi
+    voldim=$(fslinfo $VOLUME|awk '/^dim/{printf "%s ",$2}')
+    seldim=$(fslinfo $SELECTION|awk '/^dim/{printf "%s ",$2}')
+    if [ "$voldim" != "$seldim" ]; then
+        echo "ERROR: Volume and segmentation dimensions do not match. $voldim != $seldim"
+        exit
+    fi
     
     data_type=$(fslinfo $SELECTION |awk '/data_type/{print $2}')
     if [ $data_type != "INT16" ]; then
