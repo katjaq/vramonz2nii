@@ -116,6 +116,7 @@ if [ ! -z $VOLUME ] &&  [ ! -z $SELECTION ]; then
         echo "Conforming the mask to int16"
         fslmaths -dt float $SELECTION -bin ${SELECTION%.nii.gz}.tmp -odt short
         SELECTION=${SELECTION%.nii.gz}.tmp
+        TMPSELFLAG=true
     fi
 
     name=${OUTPUT%.vramonz}
@@ -135,4 +136,7 @@ EOF
     fslchfiletype ANALYZE $VOLUME $OUTPUT
     fslchfiletype ANALYZE $SELECTION $OUTPUT.sel
     zip -jm $OUTPUT.vramonz $OUTPUT.vramon $OUTPUT.hdr $OUTPUT.img $OUTPUT.sel.hdr $OUTPUT.sel.img
+    if [ TMPSELFLAG ]; then
+        rm $SELECTION.nii.gz
+    fi
 fi
