@@ -77,7 +77,7 @@ if [ ! -z $INPUT ]; then
     echo $cmd
     $cmd
     echo "Convert to nii.gz"
-    fslchfiletype NIFTI_GZ ${OUTPUT}$vol.img
+    fslchfiletype NIFTI_GZ ${OUTPUT}/$vol.img
 
     echo "Extract selection from vramonz file"
     sel=$(unzip -c $INPUT *.vramon|awk -F= '{gsub(/[";]/,"")}/selection/{v=$2;gsub(/^[ ]+/,"",v)}END{print v}'|sed 's/.hdr//')
@@ -86,7 +86,7 @@ if [ ! -z $INPUT ]; then
     echo $cmd
     $cmd
     echo "Convert to nii.gz"
-    fslchfiletype NIFTI_GZ $OUTPUT/$sel.img
+    fslchfiletype NIFTI_GZ ${OUTPUT}/$sel.img
 fi
 
 # nii to vramonz
