@@ -5,7 +5,7 @@ This scripts converts a `.vramonz` file into a pair of `.nii.gz` files, or vicev
 To convert from `vramonz` to `nii.gz` use:
 
 ```
-vramon2nii -v volfile.nii.gz -s segfile.nii.gz -o /output/file_root
+vramon2nii -i infile.vramonz -o /output/path/
 ```
 
 The result will be a file named `file_root.vramonz` located at path `/output/`. The
@@ -14,7 +14,7 @@ file segfile will be converted to `int16`.
 To convert from a pair of `nii.gz` to `vramonz` use:
 
 ```
-vramon2nii -i infile.vramonz -o /output/path/
+vramon2nii -v volfile.nii.gz -s segfile.nii.gz -o /output/file_root
 ```
 
 The result will be a pair of `nii.gz` files called `infile.nii.gz` and `infile.sel.nii.gz`
