@@ -1,6 +1,6 @@
 ## vramonz2nii
 
-This scripts converts a `.vramonz` file into a pair of `.nii.gz` files, or viceversa.
+These scripts converts a `.vramonz` file into a pair of `.nii.gz` files, or viceversa.
 
 To convert from `vramonz` to `nii.gz` use:
 
