@@ -2,28 +2,31 @@
 
 # vramonz2nii
 # Roberto Toro, April 2017
+# Katja Heuer, April 2018
 # v1, April 2017
+# v2, April 2018
 
 if [ $# -eq 0 ]; then
     echo \
 "
-vramonz2nii, April 2017
+vramonz2nii, April 2018
 This scripts converts a .vramonz file into a pair of .nii.gz files, or viceversa.
 
 To convert from vramonz to nii.gz use:
 
-    vramon2nii -v volfile.nii.gz -s segfile.nii.gz -o /output/file_root
-
-The result will be a file named file_root.vramonz located at path /output/. The
-file segfile will be converted to int16.
-
-To convert from a pair of nii.gz to vramonz use:
-
-    vramon2nii -i infile.vramonz -o /output/path/
+    vramonz2nii.sh -i infile.vramonz -o /output/path/
 
 The result will be a pair of nii.gz files called infile.nii.gz and infile.sel.nii.gz
 located at /output/path/. The output filenames will be those internally encoded in
 the vramonz file, and may not be as expected if the original vramonz file is corrupt.
+
+
+To convert from a pair of nii.gz to vramonz use:
+
+    vramonz2nii.sh -v volfile.nii.gz -s segfile.nii.gz -o /output/file_root
+    
+The result will be a file named file_root.vramonz located at path /output/. The
+file segfile will be converted to int16.
 "
     exit
 fi
@@ -77,7 +80,7 @@ if [ ! -z $INPUT ]; then
     echo $cmd
     $cmd
     echo "Convert to nii.gz"
-    fslchfiletype NIFTI_GZ ${OUTPUT}/$vol.img
+    fslchfiletype_exe NIFTI_GZ ${OUTPUT}/$vol.img
 
     echo "Extract selection from vramonz file"
     sel=$(unzip -c $INPUT *.vramon|awk -F= '{gsub(/[";]/,"")}/selection/{v=$2;gsub(/^[ ]+/,"",v)}END{print v}'|sed 's/.hdr//')
@@ -86,7 +89,7 @@ if [ ! -z $INPUT ]; then
     echo $cmd
     $cmd
     echo "Convert to nii.gz"
-    fslchfiletype NIFTI_GZ ${OUTPUT}/$sel.img
+    fslchfiletype_exe NIFTI_GZ ${OUTPUT}/$sel.img
 fi
 
 # nii to vramonz
@@ -133,8 +136,8 @@ volume="$name.hdr";
 selection="$name.sel.hdr";
 }
 EOF
-    fslchfiletype ANALYZE $VOLUME $OUTPUT
-    fslchfiletype ANALYZE $SELECTION $OUTPUT.sel
+    fslchfiletype_exe ANALYZE $VOLUME $OUTPUT
+    fslchfiletype_exe ANALYZE $SELECTION $OUTPUT.sel
     zip -jm $OUTPUT.vramonz $OUTPUT.vramon $OUTPUT.hdr $OUTPUT.img $OUTPUT.sel.hdr $OUTPUT.sel.img
     if [ TMPSELFLAG ]; then
         rm $SELECTION.nii.gz
